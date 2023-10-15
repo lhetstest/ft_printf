@@ -32,8 +32,8 @@ int ft_printf(const char *format, ...)
 				c = va_args(args, c);
 				}
 			}
-		}
+		};
 
 	
-	va_end()
+	va_end(args);
 }
