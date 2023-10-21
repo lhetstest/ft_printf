@@ -12,28 +12,49 @@
 
 #include "ft_printf.h"
 
-typedef struct s_sc
+int ft_printf(const char *str, ...)
 {
-	int	len;
-	int	width;
-}	t_sc;
+	int i;
+	va_list args;
+	char *fst;
 
-int ft_printf(const char *format, ...)
-{
-	va_list	args;
-	va_start(args, format);
-	t_sc	sc;
-	char c;
-
-	while (*format){
-		if (*format == '%') {
-			format++;
-			if (*format == 'c') {
-				c = va_args(args, c);
-				}
-			}
-		};
-
-	
+	i = 0;
+	va_start(args, str);
+	while (*str)
+	{
+		if (*str == '%')
+		{
+			fst = (char *)str;
+			if (*(++str))
+				i += ft_parse((char *)str, args);
+			while (*str && !ft_strchr(SPECIFIERS, *str))
+				str++;
+			if (!(*str))
+				str = fst;
+		}
+		else
+			i += ft_putchar_fd(*str, 1);
+		if (*str)
+			str++;
+	}
 	va_end(args);
+	return (i);
+}
+
+int ft_print_format(t_format f, va_list args)
+{
+	int count;
+
+	count = 0;
+	if (f.specifier == 'c' || f.specifier == '%')
+		count = ft_print_c_pct(f, args);
+	if (f.specifier == 's')
+		count = ft_print_s(f, args);
+	if (f.specifier == 'd' || f.specifier == 'i' || f.specifier == 'u')
+		count = ft_print_d_i_u(f, args);
+	if (f.specifier == 'X' || f.specifier == 'x')
+		count = ft_print_x(f, args);
+	if (f.specifier == 'p')
+		count = ft_print_p(f, args);
+	return (count);
 }
