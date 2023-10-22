@@ -56,7 +56,7 @@ int ft_print_format(t_format f, va_list ap);
 int ft_print_c_pct(t_format f, va_list ap);
 
 /* Prints strings with format */
-int ft_print_s(t_format f, va_list ap);
+int ft_print_s(char const *str);
 
 /* Prints decimal number with format */
 int ft_print_d_i_u(t_format f, va_list ap);

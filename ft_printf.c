@@ -12,49 +12,46 @@
 
 #include "ft_printf.h"
 
+static int ft_convert(char specifier, va_list args)
+{
+	if (specifier == '%')
+		return (write(1, "%", 1));
+	else if (specifier == 'c')
+	{
+		ft_putchar_fd(va_arg(args, int), 1);
+		return (1);
+	}
+	else if (specifier == 's')
+		return ft_print_s(va_arg(args, char *));
+	else if (specifier == 'd' || specifier == 'i' || specifier == 'u')
+		cnt = ft_print_d_i_u(f, args);
+	if (f.specifier == 'X' || f.specifier == 'x')
+		cnt = ft_print_x(f, args);
+	if (f.specifier == 'p')
+		cnt = ft_print_p(f, args);
+	return (cnt);
+}
+
 int ft_printf(const char *str, ...)
 {
 	int i;
+	int len;
 	va_list args;
-	char *fst;
 
 	i = 0;
+	len = 0;
 	va_start(args, str);
-	while (*str)
+	while (str[i])
 	{
-		if (*str == '%')
+		if (str[i] == '%')
 		{
-			fst = (char *)str;
-			if (*(++str))
-				i += ft_parse((char *)str, args);
-			while (*str && !ft_strchr(SPECIFIERS, *str))
-				str++;
-			if (!(*str))
-				str = fst;
+			i++;
+			len += ft_convert(str[i], args);
 		}
 		else
-			i += ft_putchar_fd(*str, 1);
-		if (*str)
-			str++;
+			len += write(1, &str[i], 1);
+		i++;
 	}
 	va_end(args);
-	return (i);
-}
-
-int ft_print_format(t_format f, va_list args)
-{
-	int count;
-
-	count = 0;
-	if (f.specifier == 'c' || f.specifier == '%')
-		count = ft_print_c_pct(f, args);
-	if (f.specifier == 's')
-		count = ft_print_s(f, args);
-	if (f.specifier == 'd' || f.specifier == 'i' || f.specifier == 'u')
-		count = ft_print_d_i_u(f, args);
-	if (f.specifier == 'X' || f.specifier == 'x')
-		count = ft_print_x(f, args);
-	if (f.specifier == 'p')
-		count = ft_print_p(f, args);
-	return (count);
+	return (len);
 }
