@@ -22,14 +22,18 @@ static int ft_convert(char specifier, va_list args)
 		return (1);
 	}
 	else if (specifier == 's')
-		return ft_print_s(va_arg(args, char *));
-	else if (specifier == 'd' || specifier == 'i' || specifier == 'u')
-		cnt = ft_print_d_i_u(f, args);
-	if (f.specifier == 'X' || f.specifier == 'x')
-		cnt = ft_print_x(f, args);
-	if (f.specifier == 'p')
-		cnt = ft_print_p(f, args);
-	return (cnt);
+		return (ft_print_s(va_arg(args, char *)));
+	else if (specifier = 'p')
+		return (ft_print_p(va_arg(args, void *)));
+	else if (specifier == 'd' || specifier == 'i')
+		return (ft_print_int(va_arg(args, int)));
+	else if (specifier == 'u')
+		return (ft_print_uns(va_arg(args, unsigned int)));
+	else if (specifier == 'X')
+		return (ft_print_hex(va_arg(args, ssize_t), true));
+	else if (specifier == 'x')
+		return (ft_print_hex(va_arg(args, ssize_t), false));
+	return (0);
 }
 
 int ft_printf(const char *str, ...)
